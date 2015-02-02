@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>images</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="/webiopi.js"></script>
+    <script type="text/javascript">
+	    //画像ファイル名を格納する変数
+		var dataArray;
+		webiopi().ready( function(){
+			console.log("webiopi ready");
+			initPic();
+		});
+
+
+		//Pythonマクロから画像ファイル名を受け取りgetFileName関数をコールバック
+		function initPic(){
+		    webiopi().callMacro("InitPic",null, getFileName);
+		    console.log("initpic");
+		}
+
+		//画像ファイル名を受け取る関数
+		function getFileName(macro, args, data){
+		    console.log(data);
+		    console.log(location.host);
+		    dataArray = data.split(',');
+		    dataArray.sort();
+		    if(!dataArray[0]){
+		        dataArray.splice(0,1);
+		    }
+		    var imageArea = document.getElementById('imageArea');
+		    for(var i=0; i<dataArray.length; i++){
+		        var ele = document.createElement('img');
+		        ele.setAttribute('src', 'http://' +location.host + '/images/' + dataArray[i]);
+		        ele.setAttribute('width', '100px');
+		        imageArea.appendChild(ele);
+		    }
+		}
+    </script>
+</head>
+<body>
+	<h1>Images</h1>
+	<div id="imageArea">
+	</div>
+	<a href="rctank.html">戻る</a>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
