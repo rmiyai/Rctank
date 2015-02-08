@@ -6,8 +6,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <title>images</title>
+	<link href="css/bootstrap-lightbox.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap-lightbox.css">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/lightbox.css">
     <script type="text/javascript" src="/webiopi.js"></script>
+    <script src="js/transition.js"></script>
+	<script type="text/javascript" src="js/bootstrap-lightbox.js"></script>
+	<script src="js/jquery-1.11.0.min.js"></script>
+	<script src="js/lightbox.min.js"></script>
     <script type="text/javascript">
 	    //画像ファイル名を格納する変数
 		var dataArray;
@@ -15,7 +22,6 @@
 			console.log("webiopi ready");
 			initPic();
 		});
-
 
 		//Pythonマクロから画像ファイル名を受け取りgetFileName関数をコールバック
 		function initPic(){
@@ -28,25 +34,54 @@
 		    console.log(data);
 		    console.log(location.host);
 		    dataArray = data.split(',');
-		    dataArray.sort();
-		    if(!dataArray[0]){
-		        dataArray.splice(0,1);
-		    }
+		    dataArray.length -= 1;
+		    dataArray.sort().reverse();
 		    var imageArea = document.getElementById('imageArea');
 		    for(var i=0; i<dataArray.length; i++){
+		    	var path = 'http://' +location.host + '/images/' + dataArray[i];
+		    	var anc = document.createElement('a');
+		    	anc.setAttribute('href', path);
+		    	anc.setAttribute('data-lightbox', 'image-1');
+
 		        var ele = document.createElement('img');
-		        ele.setAttribute('src', 'http://' +location.host + '/images/' + dataArray[i]);
-		        ele.setAttribute('width', '100px');
-		        imageArea.appendChild(ele);
+		        ele.setAttribute('src', path);
+		        ele.setAttribute('width', '25%');
+		        ele.setAttribute('class', 'img-thumbnail');
+		        imageArea.appendChild(anc).appendChild(ele);
 		    }
 		}
     </script>
 </head>
 <body>
-	<h1>Images</h1>
-	<div id="imageArea">
+	<div class="container">
+        <div class="navbar navbar-default" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">ナビゲーションの切替</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="http://192.168.1.200:8000/">SmartRoom</a>
+            </div><!-- /.navbar-header -->
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="http://192.168.1.200:8000/">Home</a></li>
+                <li><a href="http://192.168.1.200:8000/history.html">Logs</a></li>
+                <li><a href="rctank.html">TankController</a></li>
+                <li class="active"><a>Pictures</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container -->
+        </div><!-- /.navbar -->
+        <br>
+		<h1>Images</h1>
+		<br>
+		<div id="imageArea">
+		</div>
+		<a href="rctank.html" class="btn">戻る</a>
 	</div>
-	<a href="rctank.html">戻る</a>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>

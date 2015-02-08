@@ -6,9 +6,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <title>tank controller</title>
-    <script type="text/javascript" src="/webiopi.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/rctank.css" rel="stylesheet">
+    <link href="rctank.css" rel="stylesheet">
+    <script type="text/javascript" src="/webiopi.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/transition.js"></script>
     <script type="text/javascript">
 
 webiopi().ready( function()
@@ -20,19 +22,105 @@ webiopi().ready( function()
 </script>
 </head>
 <body>
-    <h1>TankController</h1>
-    <a class="btn btn-primary">button</a>
-    <h2 id="msg">&nbsp;</h2>
-    <img src="http://192.168.1.201:9000/?action=stream" style="float:left; width:400px;">
-    <input type="button" value="pic" onclick="snap()">
-    <div>
+    <div class="container" style="overflow:hidden;">
+        <div class="navbar navbar-default" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">ナビゲーションの切替</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="http://192.168.1.200:8000/">SmartRoom</a>
+            </div><!-- /.navbar-header -->
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="http://192.168.1.200:8000/">Home</a></li>
+                <li><a href="http://192.168.1.200:8000/history.html">Logs</a></li>
+                <li class="active"><a>TankController</a></li>
+                <li><a href="index.html">Pictures</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container -->
+        </div><!-- /.navbar -->
+        <br>
+        <h1>TankController</h1>
+        <br>
+        <div class="row">
+        <div class="col-md-6">
+            <img src="http://192.168.1.201:9000/?action=stream" style="width:100%;">
+        </div>
+        <div id="control-area" class="col-md-4 col-md-offset2" style="margin-left:30px;">
+            <table>
+                <tbody>
+                    <tr>
+                        <td align="center" width="100" height="90"></td>
+                        <td align="center" width="100" height="90">
+                            <input type="button" value="Light" class="btn btn-primary">
+                        </td>
+                        <td align="center" width="100" height="90">  
+                           <a href="#my-modal" data-toggle="modal"><input type="button" value="Snap" onclick="snap()" class="btn btn-primary"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" width="100" height="90">
+                        </td>
+                        <td align="center" width="100" height="90">
+                            <input class="btn" type="button" value="Forward" onclick="drive(1)" data-role="none">
+                        </td>
+                        <td align="center" width="100" height="90">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" width="100" height="90">
+                        <input class="btn" type="button" value="Turn left" onclick="drive(4)" data-role="none">
+                        </td>
+                        <td align="center" width="100" height="90">
+                        <input class="btn" type="button" value="Stop" onclick="drive(0)" data-role="none">
+                        </td>
+                        <td align="center" width="100" height="90">
+                        <input class="btn" type="button" value="Turn right" onclick="drive(3)" data-role="none">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" width="100" height="90">
+                        </td>
+                        <td align="center" width="100" height="90">
+                        <input class="btn" type="button" value="Back" onclick="drive(2)" data-role="none">
+                        </td>
+                        <td align="center" width="100" height="90"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="range" min="1" max="10" value="4" onchange="vlevel (this.value)">
+        </div><!-- control-area -->
+        </div><!-- img and ctrl-area row -->
     </div>
-    <div>
+        <!-- 2.モーダルの配置 -->
+    <div class="modal fade" id="my-modal" tabindex="-1">
+        <div class="modal-dialog">
 
-    <input type="range" min="1" max="10" value="4" onchange="vlevel (this.value)">
+            <!-- 3.モーダルのコンテンツ -->
+            <div class="modal-content">
+                <!-- 4.モーダルのヘッダ -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-label">写真を撮りました。</h4>
+                </div>
+                <!-- 5.モーダルのボディ -->
+                <div class="modal-body"　id="modal-msg">
+                    <a href="http://192.168.1.201:8000/index.html" class="btn">写真一覧</a>
+                </div>
+                <!-- 6.モーダルのフッタ -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <a href="index.html">写真を見る</a>
     <script type="text/javascript">
         var cnt = 0;
         function drive(mode){   // Change drive mode. 0 : Stop, 1 : Forward, 2 : Backward, 3 : CW, 4 : CCW
@@ -63,6 +151,7 @@ webiopi().ready( function()
                     drive(2);
                 }
             }
+            return false;
         }
 
         document.onkeyup = stop;
@@ -76,7 +165,7 @@ webiopi().ready( function()
             var code = data;
             console.log(code);
             if(code == 0){
-                msgNode.innerHTML = 'success';
+                //$('#my-modal').modal('show');
             }
         }
     </script>
