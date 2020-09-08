@@ -1,6 +1,6 @@
 # Rctank
 
-SmartRoomの一部として室内の監視を行う自走式カメラ。  
+[SmartRoom](https://github.com/rmiyai/smart-room)の一部として室内の監視を行う自走式カメラ。  
 wifiで接続されており、同一ネットワークから操作画面にアクセスし、操作が可能。
 
 ## 環境
